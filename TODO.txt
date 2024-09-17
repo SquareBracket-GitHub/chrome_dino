@@ -1,0 +1,2 @@
+1. gournd_x1과 gournd_x2 이름 ground_x1, ground_x2로 바꾸기
+2.모듈화
