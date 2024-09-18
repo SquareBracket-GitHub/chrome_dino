@@ -17,14 +17,20 @@ class Player:
         self.substate = ''
         self.frames = 0
         self.animationNum = 0
+
+    def stop(self):
+        self.state = 'dead'
     
     def jump(self):
-        if self.state == 'jumping': return
+        if self.state == 'jumping' or self.state == 'dead': return
         self.jumping = JUMP_POWER
         self.state = 'jumping'
         jump_sound.play()
 
     def play(self, screen):
+        if self.state == 'dead':
+            blitSprite('dino_dead', screen, self.x, self.y)
+            return
         self.y = -self.farToGround + 470
         self.animationNum = math.floor(self.frames / 5)
 

@@ -33,5 +33,6 @@ def blitText(text, screen, x=0, y=0, direction="RIGHT"):
         spacing = spacing * -1
         text_list.reverse()
     for i, word in enumerate(text_list):
-        blitSprite(word, screen, x + space, y)
+        if word != ' ':
+            blitSprite(word, screen, x + space, y)
         space += spacing

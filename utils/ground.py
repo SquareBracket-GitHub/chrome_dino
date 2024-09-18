@@ -7,6 +7,12 @@ class Ground:
         self.y = 500
         self.speed = GROUND_SPEED
         self.moving = False
+
+    def move(self):
+        self.moving = True
+
+    def stop(self):
+        self.moving = False
         
     def play(self, screen):
         if self.moving:
