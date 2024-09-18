@@ -4,6 +4,8 @@ import random
 from utils.ground import Ground
 from utils.player import Player
 from utils.score import ScoreText
+from utils.gameover_UI import GameOver_UI
+from utils.high_score import writeHighScore
 
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -20,6 +22,8 @@ player = Player()
 
 scoreText = ScoreText()
 
+gameover = GameOver_UI()
+
 game_status = 'wating'
 
 pteras = []
@@ -29,6 +33,22 @@ def generatePtera():
     pteras.append({'x': SCREEN_WIDTH, 'y': random_Y, 'frame': 0})
 
 generatePtera()
+
+def gameOver():
+    ground_1.stop()
+    ground_2.stop()
+    scoreText.stop()
+    player.stop()
+    gameover.setVisible(True)
+    writeHighScore(scoreText.score)
+
+def setGame():
+    ground_1.__init__(0)
+    ground_2.__init__(1200)
+    scoreText.__init__()
+    player.__init__()
+    gameover.__init__()
+    scoreText.__init__()
 
 running = True
 clock = pygame.time.Clock()
@@ -41,20 +61,27 @@ while running:
                 case pygame.K_UP:
                     player.jump()
                     break
+                case pygame.K_DELETE:
+                    game_status = 'gameover'
+                    gameOver()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if game_status == 'gameover':
+                game_status = 'waitng'
+                setGame()
     screen.fill(gray)
 
     player.play(screen)
     ground_1.play(screen)
     ground_2.play(screen)
-    scoreText.scoring()
+    scoreText.play(screen)
+
+    gameover.display(screen)
 
     if player.farToGround < 0:
         game_status = 'playing'
-        ground_1.moving = True
-        ground_2.moving = True
-        scoreText.start = True
-
-    scoreText.display(screen, SCREEN_WIDTH)
+        ground_1.move()
+        ground_2.move()
+        scoreText.startScoring()
 
     # for ptera in pteras:
     #     ptera['frame'] += 1
