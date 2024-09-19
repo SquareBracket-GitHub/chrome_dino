@@ -1,9 +1,19 @@
-#screen size
+#SCREEN SIZE
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 700
 
-#ground setting
+#GROUND_SETTING
 GROUND_SPEED = 7
 
-#player setting
+#PLAYER SETTING
 JUMP_POWER = 8
+
+#OBSTACLE SETTING
+PTERA_SPEED = 1.3               #GROUND_SPEED에 곱함
+PTERA_INTERVAL = SCREEN_WIDTH   #SCREEN_WIDTH에 뺌
+CACTUS_INTERVAL = 500           #SCREEN_WIDTH에 뺌
+PTERA_PROBABILITY = 500         #프레임당 값분의 1
+CACTUS_PROBABILITY = 100        #프레임당 값분의 1
+
+#SCORE SYSTEM
+CHECK_POINT = 300               #값의 배수마다 체크포인트 효과음
