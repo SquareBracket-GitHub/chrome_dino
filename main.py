@@ -9,8 +9,9 @@ from utils.gameover_UI import GameOver_UI
 from utils.high_score import writeHighScore
 from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
+from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT
 
 pygame.init()
 
@@ -66,6 +67,8 @@ while running:
                     player.jump()
                     break
                 case pygame.K_DELETE:
+                    if game_status != 'gameover':
+                        playSound(1)
                     game_status = 'gameover'
                     gameOver()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -89,9 +92,11 @@ while running:
         ptera_x = ptera.x
         if ptera_x > 0:
             dontSpawn_ptera = True
-        if ptera_x < -100:
+        if ptera_x < SCREEN_WIDTH - PTERA_INTERVAL:
             del pteras[0]
         if player.rect.colliderect(ptera.rect):
+            if game_status != 'gameover':
+                playSound(1)
             game_status = 'gameover'
             gameOver()
     
@@ -105,12 +110,14 @@ while running:
     i = 0
     for cactus in cactusArr:
         cactus.play(screen)
-        if cactus.x > SCREEN_WIDTH - 500:
+        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL:
             dontSpawn_cactus = True
         if cactus.x < -100:
             deleteList.append(i)
 
         if player.rect.colliderect(cactus.rect):
+            if game_status != 'gameover':
+                playSound(1)
             game_status = 'gameover'
             gameOver()
         i += 1
@@ -123,8 +130,6 @@ while running:
         if new_cactus:
             cactusArr.append(new_cactus)
 
-        
-
     if player.farToGround < 0:
         game_status = 'playing'
         ground_1.move()
@@ -134,6 +139,9 @@ while running:
         for cactus in cactusArr:
             cactus.move()
         scoreText.startScoring()
+
+    if scoreText.score % CHECK_POINT == 0 and scoreText.score != 0:
+        playSound(2)
 
     pygame.display.flip()
 
