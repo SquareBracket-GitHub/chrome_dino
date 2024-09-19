@@ -1,11 +1,8 @@
 from utils.sprites import blitSprite, getHeight, getWidth, getRect
+from utils.sound import playSound
 from settings import JUMP_POWER
 import pygame
 import math
-import os
-
-pygame.mixer.init()
-jump_sound = pygame.mixer.Sound(os.path.abspath('assets/sounds/jump.mp3'))
 
 class Player:
     def __init__(self):
@@ -28,11 +25,10 @@ class Player:
         if self.state == 'jumping' or self.state == 'dead' or self.substate != '': return
         self.jumping = JUMP_POWER
         self.state = 'jumping'
-        jump_sound.play()
+        playSound(0)
 
     def play(self, screen):
         if self.state == 'dead':
-            # if self.substate == 
             self.y = -self.farToGround + 470
             blitSprite('dino_dead', screen, self.x, self.y)
             return

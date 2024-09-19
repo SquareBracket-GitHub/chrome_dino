@@ -1,4 +1,4 @@
-from settings import SCREEN_WIDTH
+from settings import SCREEN_WIDTH, CACTUS_PROBABILITY
 from utils.sprites import blitSprite, getRect
 from settings import GROUND_SPEED
 import random
@@ -33,7 +33,7 @@ class Cactus():
 def generateRandomCactus(isPlaying):
     if not isPlaying:
         return
-    randomChance = random.randrange(1, 101) # 1 to 100
+    randomChance = random.randrange(1, CACTUS_PROBABILITY + 1) # 1 to 100
     if randomChance <= 5:
         size = 'small'
         type = 0

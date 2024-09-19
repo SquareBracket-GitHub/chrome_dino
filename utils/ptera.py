@@ -1,5 +1,5 @@
 import random
-from settings import SCREEN_WIDTH, GROUND_SPEED
+from settings import SCREEN_WIDTH, GROUND_SPEED, PTERA_SPEED, PTERA_PROBABILITY
 from utils.sprites import blitSprite, getWidth, getHeight, getRect
 import math
 
@@ -25,7 +25,7 @@ class Ptera:
         if self.isGameOver:
             blitSprite('ptera0' + str(self.animationNum), screen, self.x, self.y)
             return
-        self.x -= GROUND_SPEED * 1.3
+        self.x -= GROUND_SPEED * PTERA_SPEED
         self.frames += 1
         self.animationNum = math.floor(self.frames/5)
         if self.animationNum > 1:
@@ -42,6 +42,6 @@ class Ptera:
 def generateRandomPtera(isPlaying):
     if not isPlaying:
         return
-    randomChance = random.randrange(1, 101)
+    randomChance = random.randrange(1, PTERA_PROBABILITY + 1)
     if randomChance <= 1:
         return Ptera()
