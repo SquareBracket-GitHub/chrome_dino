@@ -36,3 +36,14 @@ def blitText(text, screen, x=0, y=0, direction="RIGHT"):
         if word != ' ':
             blitSprite(word, screen, x + space, y)
         space += spacing
+
+def getWidth(sprite):
+    w = sprites[sprite].get_width()
+    return w
+
+def getHeight(sprite):
+    h = sprites[sprite].get_height()
+    return h
+
+def getRect(sprite, position):
+    return sprites[sprite].get_rect(center = position)
