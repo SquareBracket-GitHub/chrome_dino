@@ -12,8 +12,11 @@ JUMP_POWER = 8
 PTERA_SPEED = 1.3               #GROUND_SPEED에 곱함
 PTERA_INTERVAL = SCREEN_WIDTH   #SCREEN_WIDTH에 뺌
 CACTUS_INTERVAL = 500           #SCREEN_WIDTH에 뺌
-PTERA_PROBABILITY = 500         #프레임당 값분의 1
+PTERA_PROBABILITY = 200         #프레임당 값분의 1
 CACTUS_PROBABILITY = 100        #프레임당 값분의 1
 
 #SCORE SYSTEM
 CHECK_POINT = 300               #값의 배수마다 체크포인트 효과음
+
+#SOUND SETTING
+SOUND_ALLOWED = True
