@@ -11,7 +11,7 @@ from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
 from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED
 
 pygame.init()
 
@@ -78,8 +78,8 @@ while running:
     screen.fill(gray)
 
     player.play(screen)
-    ground_1.play(screen)
-    ground_2.play(screen)
+    ground_1.play(screen, scoreText.score)
+    ground_2.play(screen, scoreText.score)
     scoreText.play(screen)
 
     gameover.display(screen)
@@ -88,7 +88,7 @@ while running:
     dontSpawn_cactus = False
 
     for ptera in pteras:
-        ptera.play(screen)
+        ptera.play(screen, scoreText.score)
         ptera_x = ptera.x
         if ptera_x > 0:
             dontSpawn_ptera = True
@@ -103,13 +103,21 @@ while running:
     if not dontSpawn_ptera:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
-            pteras.append(new_ptera)
+            print('------------')
+            for c in cactusArr:
+                mc = c.x - 60 - (scoreText.score * 0.002)
+                mp = (new_ptera.x - 60 - (scoreText.score * 0.002))/PTERA_SPEED
+                print(mp - mc)
+                if mp - mc <= 120:          #새 높을때
+                    dontSpawn_ptera = True
+            if not dontSpawn_ptera:
+                pteras.append(new_ptera)
     
     deleteList = []
 
     i = 0
     for cactus in cactusArr:
-        cactus.play(screen)
+        cactus.play(screen, scoreText.score)
         if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL:
             dontSpawn_cactus = True
         if cactus.x < -100:
@@ -124,6 +132,7 @@ while running:
     
     for e in deleteList:
         del cactusArr[e]
+        print('deleted')
     
     if not dontSpawn_cactus:
         new_cactus = generateRandomCactus(game_status == 'playing')
