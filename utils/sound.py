@@ -1,4 +1,5 @@
 import pygame
+from settings import SOUND_ALLOWED
 import os
 
 pygame.mixer.init()
@@ -10,4 +11,5 @@ sounds = [
 ]
 
 def playSound(sound):
+    if not SOUND_ALLOWED: return
     sounds[sound].play()

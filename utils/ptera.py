@@ -2,6 +2,7 @@ import random
 from settings import SCREEN_WIDTH, GROUND_SPEED, PTERA_SPEED, PTERA_PROBABILITY
 from utils.sprites import blitSprite, getWidth, getHeight, getRect
 import math
+import sympy
 
 class Ptera:
     def __init__(self):
@@ -21,11 +22,11 @@ class Ptera:
     def move(self):
         self.moving = True
 
-    def play(self, screen):
+    def play(self, screen, score):
         if self.isGameOver:
             blitSprite('ptera0' + str(self.animationNum), screen, self.x, self.y)
             return
-        self.x -= GROUND_SPEED * PTERA_SPEED
+        self.x -= GROUND_SPEED * PTERA_SPEED + (score * 0.002)
         self.frames += 1
         self.animationNum = math.floor(self.frames/5)
         if self.animationNum > 1:

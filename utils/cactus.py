@@ -20,11 +20,11 @@ class Cactus():
     def move(self):
         self.moving = True
 
-    def play(self, screen):
+    def play(self, screen, score):
         if self.isGameOver:
             blitSprite(self.img, screen, self.x, self.y)
             return
-        self.x -= GROUND_SPEED
+        self.x -= GROUND_SPEED + (score * 0.002)
 
         self.rect = getRect(self.img, (self.x, self.y))
 
