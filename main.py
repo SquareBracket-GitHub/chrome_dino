@@ -11,7 +11,7 @@ from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
 from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED
 
 pygame.init()
 
@@ -94,22 +94,40 @@ while running:
             dontSpawn_ptera = True
         if ptera_x < SCREEN_WIDTH - PTERA_INTERVAL:
             del pteras[0]
-        if player.rect.colliderect(ptera.rect):
+        # if player.rect.colliderect(ptera.rect):
+        #     if game_status != 'gameover':
+        #         playSound(1)
+        #     game_status = 'gameover'
+        #     gameOver()
+        if player.mask.overlap(ptera.mask, (ptera.x - player.x, ptera.y - player.y)):
             if game_status != 'gameover':
                 playSound(1)
             game_status = 'gameover'
             gameOver()
+        
     
     if not dontSpawn_ptera:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
-            print('------------')
+            print('------------ new ptera was generated ------------')
+            i = 0
+            print('cactus_speed: ' + str(GROUND_SPEED) + ', ptera_speed: ' + str(PTERA_SPEED))
+            print('game_speed: ' + str(scoreText.score * 0.002))
+            print('ptera: (' + str(new_ptera.x) + ', ' + str(new_ptera.y) + ')')
+            print('dino: (' + str(player.x) + ', 470)')
             for c in cactusArr:
-                mc = c.x - 60 - (scoreText.score * 0.002)
-                mp = (new_ptera.x - 60 - (scoreText.score * 0.002))/PTERA_SPEED
-                print(mp - mc)
-                if mp - mc <= 120:          #새 높을때
+                i += 1
+                print('c_' + str(i) + ': (' + str(c.x) + ', ' + str(c.y) + ')')
+
+                a = (c.x - player.x) / (GROUND_SPEED + scoreText.score * 0.002)
+                moved_x = new_ptera.x - a * (PTERA_SPEED * GROUND_SPEED + scoreText.score)
+                _math = math.sqrt(math.pow(player.x - moved_x, 2) + math.pow(player.y - new_ptera.y, 2))
+
+                print('c_' + str(i) + ': ' + str(_math))
+                r = 3000
+                if _math <= r:
                     dontSpawn_ptera = True
+                    print("return: Do not spawn")
             if not dontSpawn_ptera:
                 pteras.append(new_ptera)
     
@@ -123,11 +141,16 @@ while running:
         if cactus.x < -100:
             deleteList.append(i)
 
-        if player.rect.colliderect(cactus.rect):
+        # if player.rect.colliderect(cactus.rect):
+        #     if game_status != 'gameover':
+        #         playSound(1)
+        #     game_status = 'gameover'
+        #     gameOver()
+        if player.mask.overlap(cactus.mask, (cactus.x - player.x, cactus.y - player.y)):
             if game_status != 'gameover':
                 playSound(1)
             game_status = 'gameover'
-            gameOver()
+            gameOver()   
         i += 1
     
     for e in deleteList:
