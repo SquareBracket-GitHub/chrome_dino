@@ -1,5 +1,5 @@
 from settings import SCREEN_WIDTH, CACTUS_PROBABILITY
-from utils.sprites import blitSprite, getRect
+from utils.sprites import blitSprite, getRect, getMask
 from settings import GROUND_SPEED
 import random
 
@@ -13,6 +13,7 @@ class Cactus():
         self.img = img
         self.moving = False
         self.isGameOver = False
+        self.mask = getMask(self.img)
 
     def stop(self):
         self.isGameOver = True

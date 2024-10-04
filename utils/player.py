@@ -1,4 +1,4 @@
-from utils.sprites import blitSprite, getHeight, getWidth, getRect
+from utils.sprites import blitSprite, getHeight, getWidth, getRect, getMask
 from utils.sound import playSound
 from settings import JUMP_POWER
 import pygame
@@ -17,6 +17,7 @@ class Player:
         self.substate = ''
         self.frames = 0
         self.animationNum = 0
+        self.mask = getMask('dino_idle')
 
     def stop(self):
         self.state = 'dead'
@@ -65,9 +66,11 @@ class Player:
             self.w = getWidth('dino_idle' + self.substate)
             self.h = getHeight('dino_idle' + self.substate)
             self.rect = getRect('dino_idle' + self.substate, (self.x, self.y))
+            self.mask = getMask('dino_idle' + self.substate)
             blitSprite('dino_idle' + self.substate, screen, self.x, self.y)
         else:
             self.w = getWidth('dino_run0' + str(self.animationNum) + self.substate)
             self.h = getHeight('dino_run0' + str(self.animationNum) + self.substate)
             self.rect = getRect('dino_idle' + self.substate, (self.x, self.y))
+            self.mask = getMask('dino_idle' + self.substate)
             blitSprite('dino_run0' + str(self.animationNum) + self.substate, screen, self.x, self.y)

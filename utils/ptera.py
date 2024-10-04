@@ -1,6 +1,6 @@
 import random
 from settings import SCREEN_WIDTH, GROUND_SPEED, PTERA_SPEED, PTERA_PROBABILITY
-from utils.sprites import blitSprite, getWidth, getHeight, getRect
+from utils.sprites import blitSprite, getWidth, getHeight, getRect, getMask
 import math
 import sympy
 
@@ -15,6 +15,7 @@ class Ptera:
         self.animationNum = 0
         self.moving = False
         self.isGameOver = False
+        self.mask = getMask('ptera00')
 
     def stop(self):
         self.isGameOver = True
@@ -35,6 +36,7 @@ class Ptera:
         self.w = getWidth('ptera0' + str(self.animationNum))
         self.h = getHeight('ptera0' + str(self.animationNum))
         self.rect = getRect('ptera0' + str(self.animationNum), (self.x, self.y))
+        self.mask = getMask('ptera0' + str(self.animationNum))
         addY = 0
         if self.animationNum == 1:
             addY = -6

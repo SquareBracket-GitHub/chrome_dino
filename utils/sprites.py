@@ -47,3 +47,6 @@ def getHeight(sprite):
 
 def getRect(sprite, position):
     return sprites[sprite].get_rect(center = position)
+
+def getMask(sprite):
+    return pygame.mask.from_surface(sprites[sprite])
