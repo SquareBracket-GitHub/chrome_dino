@@ -105,7 +105,9 @@ while running:
             game_status = 'gameover'
             gameOver()
         
-    
+    BLUE = (0, 0, 255)
+    # pygame.draw.circle(screen, BLUE, [player.x + 65, 440], 40)
+
     if not dontSpawn_ptera:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
@@ -116,16 +118,13 @@ while running:
             print('ptera: (' + str(new_ptera.x) + ', ' + str(new_ptera.y) + ')')
             print('dino: (' + str(player.x) + ', 470)')
             for c in cactusArr:
-                i += 1
-                print('c_' + str(i) + ': (' + str(c.x) + ', ' + str(c.y) + ')')
-
-                a = (c.x - player.x) / (GROUND_SPEED + scoreText.score * 0.002)
-                moved_x = new_ptera.x - a * (PTERA_SPEED * GROUND_SPEED + scoreText.score)
-                _math = math.sqrt(math.pow(player.x - moved_x, 2) + math.pow(player.y - new_ptera.y, 2))
-
-                print('c_' + str(i) + ': ' + str(_math))
-                r = 3000
-                if _math <= r:
+                censor_pos = (player.x + 85, 420)
+                censor_r = 40
+                w = math.sqrt(math.pow(player.x + 65 - new_ptera.x, 2)) / (GROUND_SPEED + scoreText.score * 0.002)
+                p_x = new_ptera.x - (w * (GROUND_SPEED * PTERA_SPEED + scoreText.score * 0.002))
+                distance = math.sqrt(math.pow(p_x - censor_pos[0], 2) + math.pow(new_ptera.y - censor_pos[1], 2))
+                print(distance, censor_r)
+                if distance <= censor_r:
                     dontSpawn_ptera = True
                     print("return: Do not spawn")
             if not dontSpawn_ptera:
@@ -136,7 +135,8 @@ while running:
     i = 0
     for cactus in cactusArr:
         cactus.play(screen, scoreText.score)
-        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL:
+        pygame.draw.circle(screen, (0, 0, 255), [SCREEN_WIDTH - CACTUS_INTERVAL - (scoreText.score * 0.1), 470], 20)
+        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (scoreText.score * 1):
             dontSpawn_cactus = True
         if cactus.x < -100:
             deleteList.append(i)
