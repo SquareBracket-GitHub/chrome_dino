@@ -2,7 +2,6 @@ import random
 from settings import SCREEN_WIDTH, GROUND_SPEED, PTERA_SPEED, PTERA_PROBABILITY
 from utils.sprites import blitSprite, getWidth, getHeight, getRect, getMask
 import math
-import sympy
 
 class Ptera:
     def __init__(self):
