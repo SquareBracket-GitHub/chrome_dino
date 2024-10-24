@@ -9,8 +9,8 @@
     <sprite name="dino_idle_crawl"     x="939" y="2"   width="59"      height="47"/>
     <sprite name="dino_run00"          x="765" y="2"   width="44"      height="47"/>
     <sprite name="dino_run01"          x="809" y="2"   width="44"      height="47"/>
-    <sprite name="dino_run00_crawl"    x="939" y="19"  width="59"      height="30"/>
-    <sprite name="dino_run01_crawl"    x="998" y="19"  width="59"      height="30"/>
+    <sprite name="dino_run00_crawl"    x="939" y="2"   width="59"      height="47"/>
+    <sprite name="dino_run01_crawl"    x="998" y="2"   width="59"      height="47"/>
     <sprite name="dino_dead"           x="853" y="2"   width="44"      height="47"/>
     <sprite name="0"                   x="484" y="2"   width="9"       height="11"/>
     <sprite name="1"                   x="494" y="2"   width="9"       height="11"/>

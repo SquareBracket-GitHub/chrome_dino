@@ -26,7 +26,7 @@ class Ptera:
         if self.isGameOver:
             blitSprite('ptera0' + str(self.animationNum), screen, self.x, self.y)
             return
-        self.x -= GROUND_SPEED * PTERA_SPEED + (score * 0.002)
+        self.x -= GROUND_SPEED * PTERA_SPEED + (score * 0.003)
         self.frames += 1
         self.animationNum = math.floor(self.frames/5)
         if self.animationNum > 1:

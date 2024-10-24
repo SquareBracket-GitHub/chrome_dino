@@ -11,7 +11,7 @@ from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
 from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPPED, PTERA_STARTING_SPAWN_SCORE
 
 pygame.init()
 
@@ -32,6 +32,8 @@ game_status = 'wating'
 
 pteras = []
 cactusArr = []
+
+game_speed = 0
 
 def gameOver():
     ground_1.stop()
@@ -74,12 +76,16 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if game_status == 'gameover':
                 game_status = 'waitng'
+                game_speed = 0
                 setGame()
     screen.fill(gray)
 
+    if game_speed < PTERA_STARTING_SPAWN_SCORE and game_status == 'playing':
+        game_speed += 1;
+
     player.play(screen)
-    ground_1.play(screen, scoreText.score)
-    ground_2.play(screen, scoreText.score)
+    ground_1.play(screen, game_speed)
+    ground_2.play(screen, game_speed)
     scoreText.play(screen)
 
     gameover.display(screen)
@@ -88,7 +94,7 @@ while running:
     dontSpawn_cactus = False
 
     for ptera in pteras:
-        ptera.play(screen, scoreText.score)
+        ptera.play(screen, game_speed)
         ptera_x = ptera.x
         if ptera_x > 0:
             dontSpawn_ptera = True
@@ -108,25 +114,36 @@ while running:
     BLUE = (0, 0, 255)
     # pygame.draw.circle(screen, BLUE, [player.x + 65, 440], 40)
 
-    if not dontSpawn_ptera:
+    if not dontSpawn_ptera and scoreText.score >= PTERA_STARTING_SPAWN_SCORE:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
-            print('------------ new ptera was generated ------------')
-            i = 0
-            print('cactus_speed: ' + str(GROUND_SPEED) + ', ptera_speed: ' + str(PTERA_SPEED))
-            print('game_speed: ' + str(scoreText.score * 0.002))
-            print('ptera: (' + str(new_ptera.x) + ', ' + str(new_ptera.y) + ')')
-            print('dino: (' + str(player.x) + ', 470)')
+            p_d_distance = (new_ptera.x - player.x)
+            w = p_d_distance  / (PTERA_SPEED * GROUND_SPEED + game_speed * 0.003)
+            moved_cactusArr = []
             for c in cactusArr:
-                censor_pos = (player.x + 85, 420)
-                censor_r = 40
-                w = math.sqrt(math.pow(player.x + 65 - new_ptera.x, 2)) / (GROUND_SPEED + scoreText.score * 0.002)
-                p_x = new_ptera.x - (w * (GROUND_SPEED * PTERA_SPEED + scoreText.score * 0.002))
-                distance = math.sqrt(math.pow(p_x - censor_pos[0], 2) + math.pow(new_ptera.y - censor_pos[1], 2))
-                print(distance, censor_r)
-                if distance <= censor_r:
+                moved_cactusArr.append(c.x - w * (GROUND_SPEED + game_speed * 0.003))
+            for x in moved_cactusArr:
+                distance = math.sqrt(math.pow(player.x - x, 2))
+                print(distance)
+                if distance < 100:
                     dontSpawn_ptera = True
-                    print("return: Do not spawn")
+                    print('good bye ptera :(')
+            # print('------------ new ptera was generated ------------')
+            # i = 0
+            # print('cactus_speed: ' + str(GROUND_SPEED) + ', ptera_speed: ' + str(PTERA_SPEED))
+            # print('game_speed: ' + str(game_speed * 0.002))
+            # print('ptera: (' + str(new_ptera.x) + ', ' + str(new_ptera.y) + ')')
+            # print('dino: (' + str(player.x) + ', 470)')
+            # for c in cactusArr:
+            #     censor_pos = (player.x + 85, 420)
+            #     censor_r = 40
+            #     w = math.sqrt(math.pow(player.x + 65 - new_ptera.x, 2)) / (GROUND_SPEED + game_speed * 0.002)
+            #     p_x = new_ptera.x - (w * (GROUND_SPEED * PTERA_SPEED + game_speed * 0.002))
+            #     distance = math.sqrt(math.pow(p_x - censor_pos[0], 2) + math.pow(new_ptera.y - censor_pos[1], 2))
+            #     print(distance, censor_r)
+            #     if distance <= censor_r:
+            #         dontSpawn_ptera = True
+            #         print("return: Do not spawn")
             if not dontSpawn_ptera:
                 pteras.append(new_ptera)
     
@@ -134,9 +151,9 @@ while running:
 
     i = 0
     for cactus in cactusArr:
-        cactus.play(screen, scoreText.score)
-        pygame.draw.circle(screen, (0, 0, 255), [SCREEN_WIDTH - CACTUS_INTERVAL - (scoreText.score * 0.1), 470], 20)
-        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (scoreText.score * 1):
+        cactus.play(screen, game_speed)
+        # pygame.draw.circle(screen, (0, 0, 255), [SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPPED), 470], 20)
+        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPPED):
             dontSpawn_cactus = True
         if cactus.x < -100:
             deleteList.append(i)
@@ -155,7 +172,6 @@ while running:
     
     for e in deleteList:
         del cactusArr[e]
-        print('deleted')
     
     if not dontSpawn_cactus:
         new_cactus = generateRandomCactus(game_status == 'playing')

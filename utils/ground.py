@@ -16,7 +16,7 @@ class Ground:
         
     def play(self, screen, score):
         if self.moving:
-            self.x -= self.speed + (score * 0.002)
+            self.x -= self.speed + (score * 0.003)
         if self.x <= -SCREEN_WIDTH - 100:
             self.x += 2 * 1200
         

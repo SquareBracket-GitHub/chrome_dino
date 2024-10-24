@@ -25,7 +25,7 @@ class Cactus():
         if self.isGameOver:
             blitSprite(self.img, screen, self.x, self.y)
             return
-        self.x -= GROUND_SPEED + (score * 0.002)
+        self.x -= GROUND_SPEED + (score * 0.003)
 
         self.rect = getRect(self.img, (self.x, self.y))
 

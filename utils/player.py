@@ -38,10 +38,9 @@ class Player:
             self.substate = '_crawl'
         else: self.substate = ''
 
-        if self.substate == '_crawl':
-            self.y = -self.farToGround + 487
-        else:
-            self.y = -self.farToGround + 470
+
+        self.y = -self.farToGround + 470
+        
         self.animationNum = math.floor(self.frames / 5)
 
         if self.state == 'jumping':
