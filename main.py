@@ -1,5 +1,4 @@
 import pygame
-import random
 import math
 
 from utils.ground import Ground
@@ -14,6 +13,8 @@ from utils.sound import playSound
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPPED, PTERA_STARTING_SPAWN_SCORE
 
 pygame.init()
+
+pygame.display.set_caption('Chrome Dino')
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -81,7 +82,7 @@ while running:
     screen.fill(gray)
 
     if game_speed < PTERA_STARTING_SPAWN_SCORE and game_status == 'playing':
-        game_speed += 1;
+        game_speed += 1
 
     player.play(screen)
     ground_1.play(screen, game_speed)
@@ -100,11 +101,6 @@ while running:
             dontSpawn_ptera = True
         if ptera_x < SCREEN_WIDTH - PTERA_INTERVAL:
             del pteras[0]
-        # if player.rect.colliderect(ptera.rect):
-        #     if game_status != 'gameover':
-        #         playSound(1)
-        #     game_status = 'gameover'
-        #     gameOver()
         if player.mask.overlap(ptera.mask, (ptera.x - player.x, ptera.y - player.y)):
             if game_status != 'gameover':
                 playSound(1)
@@ -112,7 +108,6 @@ while running:
             gameOver()
         
     BLUE = (0, 0, 255)
-    # pygame.draw.circle(screen, BLUE, [player.x + 65, 440], 40)
 
     if not dontSpawn_ptera and scoreText.score >= PTERA_STARTING_SPAWN_SCORE:
         new_ptera = generateRandomPtera(game_status == 'playing')
@@ -127,23 +122,6 @@ while running:
                 print(distance)
                 if distance < 100:
                     dontSpawn_ptera = True
-                    print('good bye ptera :(')
-            # print('------------ new ptera was generated ------------')
-            # i = 0
-            # print('cactus_speed: ' + str(GROUND_SPEED) + ', ptera_speed: ' + str(PTERA_SPEED))
-            # print('game_speed: ' + str(game_speed * 0.002))
-            # print('ptera: (' + str(new_ptera.x) + ', ' + str(new_ptera.y) + ')')
-            # print('dino: (' + str(player.x) + ', 470)')
-            # for c in cactusArr:
-            #     censor_pos = (player.x + 85, 420)
-            #     censor_r = 40
-            #     w = math.sqrt(math.pow(player.x + 65 - new_ptera.x, 2)) / (GROUND_SPEED + game_speed * 0.002)
-            #     p_x = new_ptera.x - (w * (GROUND_SPEED * PTERA_SPEED + game_speed * 0.002))
-            #     distance = math.sqrt(math.pow(p_x - censor_pos[0], 2) + math.pow(new_ptera.y - censor_pos[1], 2))
-            #     print(distance, censor_r)
-            #     if distance <= censor_r:
-            #         dontSpawn_ptera = True
-            #         print("return: Do not spawn")
             if not dontSpawn_ptera:
                 pteras.append(new_ptera)
     
@@ -152,17 +130,11 @@ while running:
     i = 0
     for cactus in cactusArr:
         cactus.play(screen, game_speed)
-        # pygame.draw.circle(screen, (0, 0, 255), [SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPPED), 470], 20)
         if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPPED):
             dontSpawn_cactus = True
         if cactus.x < -100:
             deleteList.append(i)
 
-        # if player.rect.colliderect(cactus.rect):
-        #     if game_status != 'gameover':
-        #         playSound(1)
-        #     game_status = 'gameover'
-        #     gameOver()
         if player.mask.overlap(cactus.mask, (cactus.x - player.x, cactus.y - player.y)):
             if game_status != 'gameover':
                 playSound(1)
