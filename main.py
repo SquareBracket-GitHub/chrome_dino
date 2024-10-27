@@ -1,5 +1,6 @@
 import pygame
 import math
+import ctypes
 
 from utils.ground import Ground
 from utils.player import Player
@@ -15,6 +16,8 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVA
 pygame.init()
 
 pygame.display.set_caption('Chrome Dino')
+iconImg = pygame.image.load('assets/icon.png')
+pygame.display.set_icon(iconImg)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
