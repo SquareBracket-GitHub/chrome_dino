@@ -28,3 +28,8 @@ def writeHighScore(score):
     f = open(path, 'w')
     f.write(str(score))
     f.close
+
+def resetHighScore():
+    path = os.path.abspath('data/HIGH_SCORE.TXT')
+    if os.path.exists(path):
+        os.remove(path)

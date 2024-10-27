@@ -5,7 +5,7 @@ from utils.ground import Ground
 from utils.player import Player
 from utils.score import ScoreText
 from utils.gameover_UI import GameOver_UI
-from utils.high_score import writeHighScore
+from utils.high_score import writeHighScore, resetHighScore
 from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
 from utils.sound import playSound
@@ -74,6 +74,10 @@ while running:
                         playSound(1)
                     game_status = 'gameover'
                     gameOver()
+                    break
+                case pygame.K_0:
+                    resetHighScore()
+                    break
         if event.type == pygame.MOUSEBUTTONDOWN:
             if game_status == 'gameover':
                 game_status = 'waitng'
@@ -120,7 +124,7 @@ while running:
             for x in moved_cactusArr:
                 distance = math.sqrt(math.pow(player.x - x, 2))
                 print(distance)
-                if distance < 100:
+                if distance < 150:
                     dontSpawn_ptera = True
             if not dontSpawn_ptera:
                 pteras.append(new_ptera)
