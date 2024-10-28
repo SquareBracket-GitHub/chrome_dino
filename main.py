@@ -11,7 +11,7 @@ from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
 from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPPED, PTERA_STARTING_SPAWN_SCORE
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPPED, PTERA_STARTING_SPAWN_SCORE, UNFAIR_PTERA_CENSOR_RANGE
 
 pygame.init()
 
@@ -127,7 +127,7 @@ while running:
             for x in moved_cactusArr:
                 distance = math.sqrt(math.pow(player.x - x, 2))
                 print(distance)
-                if distance < 150:
+                if distance < UNFAIR_PTERA_CENSOR_RANGE:
                     dontSpawn_ptera = True
             if not dontSpawn_ptera:
                 pteras.append(new_ptera)
