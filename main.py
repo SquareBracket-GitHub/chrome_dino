@@ -120,7 +120,7 @@ while running:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
             p_d_distance = (new_ptera.x - player.x)
-            w = p_d_distance  / (PTERA_SPEED * GROUND_SPEED + game_speed * 0.003)
+            w = p_d_distance  / (PTERA_SPEED  + game_speed * 0.003)
             moved_cactusArr = []
             for c in cactusArr:
                 moved_cactusArr.append(c.x - w * (GROUND_SPEED + game_speed * 0.003))
