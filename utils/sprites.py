@@ -25,16 +25,16 @@ for sprite in root.findall('sprite'):
 def blitSprite(sprite, screen, x=0, y=0):
     return screen.blit(sprites[sprite], (x, y))
 
-def blitText(text, screen, x=0, y=0, direction="RIGHT"):
+def blitText(screen, content='', pos=(0,0), direction='RIGHT'):
     space = 0
     spacing = 11
-    text_list = list(text)
+    text_list = list(content)
     if direction == 'LEFT':
         spacing = spacing * -1
         text_list.reverse()
     for i, word in enumerate(text_list):
         if word != ' ':
-            blitSprite(word, screen, x + space, y)
+            blitSprite(word, screen, pos[0] + space, pos[1])
         space += spacing
 
 def getWidth(sprite):
