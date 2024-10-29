@@ -1,68 +1,89 @@
 import pygame
 import math
-import ctypes
 
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPEED, PTERA_STARTING_SPAWN_SCORE, UNFAIR_PTERA_CENSOR_RANGE
 from utils.ground import Ground
 from utils.player import Player
-from utils.score import ScoreText
 from utils.gameover_UI import GameOver_UI
-from utils.high_score import writeHighScore, resetHighScore
+from utils.high_score import writeHighScore, resetHighScore, loadHighScore
+from utils.sound import playSound
+from utils.sprites import blitText
 from utils.ptera import generateRandomPtera
 from utils.cactus import generateRandomCactus
-from utils.sound import playSound
 
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPPED, PTERA_STARTING_SPAWN_SCORE, UNFAIR_PTERA_CENSOR_RANGE
-
+#pygame init
 pygame.init()
 
+#set pygame
 pygame.display.set_caption('Chrome Dino')
-iconImg = pygame.image.load('assets/icon.png')
-pygame.display.set_icon(iconImg)
+
+icon_img = pygame.image.load('assets/icon.png')
+pygame.display.set_icon(icon_img)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-gray = pygame.Color("#F7F7F7")
+#define color
+GRAY = pygame.Color("#F7F7F7")
+BLUE = pygame.Color("#0000FF")
 
+#init sprites
 ground_1 = Ground(0)
 ground_2 = Ground(1200)
-
 player = Player()
+gameover_UI = GameOver_UI()
+ptera_arr = []
+cactus_arr = []
 
-scoreText = ScoreText()
-
-gameover = GameOver_UI()
-
+#game variables
 game_status = 'wating'
-
-pteras = []
-cactusArr = []
-
+game_score = 0
 game_speed = 0
 
+#game functions
 def gameOver():
+    global game_status
+
+    if game_status != 'gameover':
+        playSound(1)
+
+    game_status = 'gameover'
+
+    player.stop()
     ground_1.stop()
     ground_2.stop()
-    scoreText.stop()
-    player.stop()
-    for ptera in pteras:
-        ptera.stop()
-    for cactus in cactusArr:
-        cactus.stop()
-    gameover.setVisible(True)
-    writeHighScore(scoreText.score)
+    gameover_UI.setVisible(True)
 
-def setGame():
+    for ptera in ptera_arr:
+        ptera.stop()
+    for cactus in cactus_arr:
+        cactus.stop()
+
+    writeHighScore(game_score)
+
+def resetGame():
+    global game_status
+    global game_score
+    global game_speed
+
+    game_status = 'wating'
+    game_score = 0
+    game_speed = 0
+
     ground_1.__init__(0)
     ground_2.__init__(1200)
-    scoreText.__init__()
     player.__init__()
-    gameover.__init__()
-    scoreText.__init__()
-    pteras.clear()
-    cactusArr.clear()
+    gameover_UI.__init__()
+
+    ptera_arr.clear()
+    cactus_arr.clear()
+
+def detectCollision(object1, object2):
+    return object1.mask.overlap(object2.mask, (object2.x - object1.x, object2.y - object1.y))
 
 running = True
 clock = pygame.time.Clock()
+
+#game
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -73,103 +94,107 @@ while running:
                     player.jump()
                     break
                 case pygame.K_DELETE:
-                    if game_status != 'gameover':
-                        playSound(1)
-                    game_status = 'gameover'
                     gameOver()
                     break
                 case pygame.K_0:
                     resetHighScore()
                     break
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if game_status == 'gameover':
-                game_status = 'waitng'
-                game_speed = 0
-                setGame()
-    screen.fill(gray)
+                if game_status == 'gameover':
+                    resetGame()
+    
+    screen.fill(GRAY)
 
-    if game_speed < PTERA_STARTING_SPAWN_SCORE and game_status == 'playing':
-        game_speed += 1
+    if game_status == 'playing':
+        #scoring
+        game_score += 1
 
+        #increasing game speed
+        if game_speed < PTERA_STARTING_SPAWN_SCORE:
+            game_speed += 1
+
+    #scoreText content
+    high_score = loadHighScore()
+    scoreText_content = ''
+    if high_score == None or high_score == '':
+        scoreText_content = str(game_score)
+    else:
+        scoreText_content = 'HI ' + high_score + ' ' + str(game_score)
+    
+    #playing sprites
     player.play(screen)
     ground_1.play(screen, game_speed)
     ground_2.play(screen, game_speed)
-    scoreText.play(screen)
+    gameover_UI.display(screen)
+    blitText(screen, scoreText_content, (SCREEN_WIDTH - 30, 300), 'LEFT')
 
-    gameover.display(screen)
-
-    dontSpawn_ptera = False
-    dontSpawn_cactus = False
-
-    for ptera in pteras:
+    dont_spawn_ptera = False
+    for ptera in ptera_arr:
         ptera.play(screen, game_speed)
-        ptera_x = ptera.x
-        if ptera_x > 0:
-            dontSpawn_ptera = True
-        if ptera_x < SCREEN_WIDTH - PTERA_INTERVAL:
-            del pteras[0]
-        if player.mask.overlap(ptera.mask, (ptera.x - player.x, ptera.y - player.y)):
-            if game_status != 'gameover':
-                playSound(1)
-            game_status = 'gameover'
-            gameOver()
+        if ptera.x > 0:
+            dont_spawn_ptera = True
+        if ptera.x < SCREEN_WIDTH - PTERA_INTERVAL:
+            del ptera_arr[0]
         
-    BLUE = (0, 0, 255)
+        isCollided = detectCollision(player, ptera)
+        if isCollided:
+            gameOver()
 
-    if not dontSpawn_ptera and scoreText.score >= PTERA_STARTING_SPAWN_SCORE:
+    dont_spawn_cactus = False
+    delete_cactus_arr = []
+    i = 0
+    for cactus in cactus_arr:
+        cactus.play(screen, game_speed)
+        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPEED):
+            dont_spawn_cactus = True
+        if cactus.x < -100:
+            delete_cactus_arr.append(i)
+        
+        isCollided = detectCollision(player, cactus)
+        if isCollided:
+            gameOver()
+
+        i += 1
+    
+    for d in delete_cactus_arr:
+        del cactus_arr[d]
+    
+    #spawn ptera
+    if not dont_spawn_ptera and game_score >= PTERA_STARTING_SPAWN_SCORE:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
             p_d_distance = (new_ptera.x - player.x)
-            w = p_d_distance  / (PTERA_SPEED  + game_speed * 0.003)
-            moved_cactusArr = []
-            for c in cactusArr:
-                moved_cactusArr.append(c.x - w * (GROUND_SPEED + game_speed * 0.003))
-            for x in moved_cactusArr:
+            t = p_d_distance  / (PTERA_SPEED  + game_speed * 0.003)
+            moved_cactus_arr = []
+            for c in cactus_arr:
+                moved_cactus_arr.append(c.x - t * (GROUND_SPEED + game_speed * 0.003))
+            for x in moved_cactus_arr:
                 distance = math.sqrt(math.pow(player.x - x, 2))
-                print(distance)
                 if distance < UNFAIR_PTERA_CENSOR_RANGE:
-                    dontSpawn_ptera = True
-            if not dontSpawn_ptera:
-                pteras.append(new_ptera)
+                    dont_spawn_ptera = True
+            if not dont_spawn_ptera:
+                ptera_arr.append(new_ptera)
     
-    deleteList = []
-
-    i = 0
-    for cactus in cactusArr:
-        cactus.play(screen, game_speed)
-        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPPED):
-            dontSpawn_cactus = True
-        if cactus.x < -100:
-            deleteList.append(i)
-
-        if player.mask.overlap(cactus.mask, (cactus.x - player.x, cactus.y - player.y)):
-            if game_status != 'gameover':
-                playSound(1)
-            game_status = 'gameover'
-            gameOver()   
-        i += 1
-    
-    for e in deleteList:
-        del cactusArr[e]
-    
-    if not dontSpawn_cactus:
+    #spawn cactus
+    if not dont_spawn_cactus:
         new_cactus = generateRandomCactus(game_status == 'playing')
         if new_cactus:
-            cactusArr.append(new_cactus)
-
+            cactus_arr.append(new_cactus)
+    
+    #sound
+    if game_score % CHECK_POINT == 0 and game_score != 0:
+        playSound(2)
+    
+    #starting game event
     if player.farToGround < 0:
         game_status = 'playing'
         ground_1.move()
         ground_2.move()
-        for ptera in pteras:
+        for ptera in ptera_arr:
             ptera.move()
-        for cactus in cactusArr:
+        for cactus in cactus_arr:
             cactus.move()
-        scoreText.startScoring()
-
-    if scoreText.score % CHECK_POINT == 0 and scoreText.score != 0:
-        playSound(2)
-
+    
     pygame.display.flip()
 
     clock.tick(60)
