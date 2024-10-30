@@ -1,6 +1,7 @@
 # Chrome Dino
 Chrome Dino  in Python!!
 This project was developed in Python(v.3.11.7) and was edited in my style.
+<img src="INGAME.PNG" alt="playing">
 
 ## Contorols
 - Jump using **up arrow**.
