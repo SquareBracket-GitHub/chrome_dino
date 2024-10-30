@@ -1,5 +1,5 @@
 # Chrome Dino
-Chrome Dino  in Python!!
+Chrome Dino  in Python!!   
 This project was developed in Python(v.3.11.7) and was edited in my style.
 <img src="INGAME.PNG" alt="playing">
 
@@ -12,3 +12,5 @@ This project was developed in Python(v.3.11.7) and was edited in my style.
 
 ## Require
 - pygame
+* * *
+made by [SquareBracket](https://github.com/SquareBracket-GitHub)
