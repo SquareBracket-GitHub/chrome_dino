@@ -7,7 +7,7 @@ from utils.tuple import editTuple
 
 class Ptera:
     def __init__(self):
-        self.pos = (SCREEN_WIDTH, random.randrange(404, 468))
+        self.pos = (SCREEN_WIDTH, random.randrange(394, 458))
         self.frames = 0
         self.animation_num = 0
         self.moving = False
@@ -21,12 +21,12 @@ class Ptera:
         self.moving = True
     
     def play(self, screen, game_speed):
-        self.pos = editTuple(self.pos, 0, self.pos[0] - (PTERA_SPEED + (game_speed * 0.003)))
-
         #If player died
         if self.is_game_over:
             blitSprite(screen, 'ptera0' + str(self.animation_num), self.pos)
             return
+        
+        self.pos = editTuple(self.pos, 0, self.pos[0] - (PTERA_SPEED + (game_speed * 0.003)))
 
         self.frames += 1
         self.animation_num = math.floor(self.frames / 5)
