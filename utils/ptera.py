@@ -32,9 +32,9 @@ class Ptera:
         self.animation_num = math.floor(self.frames / 5)
 
         #animation number reset
-        if self.animationNum > 1:
+        if self.animation_num > 1:
             self.frames = 0
-            self.animationNum = 0
+            self.animation_num = 0
 
         self.mask = getMask('ptera0' + str(self.animation_num))
         blitSprite(screen, 'ptera0' + str(self.animationNum), self.pos)
