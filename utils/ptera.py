@@ -37,7 +37,7 @@ class Ptera:
             self.animation_num = 0
 
         self.mask = getMask('ptera0' + str(self.animation_num))
-        blitSprite(screen, 'ptera0' + str(self.animationNum), self.pos)
+        blitSprite(screen, 'ptera0' + str(self.animation_num), self.pos)
 
 def generateRandomPtera(isPlaying):
     if not isPlaying:
