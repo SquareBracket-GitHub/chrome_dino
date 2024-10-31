@@ -1,49 +1,47 @@
 import random
-from settings import SCREEN_WIDTH, PTERA_SPEED, PTERA_PROBABILITY
-from utils.sprites import blitSprite, getWidth, getHeight, getRect, getMask
 import math
+
+from settings import SCREEN_WIDTH, PTERA_SPEED, PTERA_PROBABILITY
+from utils.sprites import blitSprite, getMask
+from utils.tuple import editTuple
 
 class Ptera:
     def __init__(self):
-        self.x = SCREEN_WIDTH
-        self.y = random.randrange(404, 468)
-        self.w = 1
-        self.h = 1
-        self.rect = getRect('ptera00', (self.x, self.y))
+        self.pos = (SCREEN_WIDTH, random.randrange(404, 468))
         self.frames = 0
-        self.animationNum = 0
+        self.animation_num = 0
         self.moving = False
-        self.isGameOver = False
+        self.is_game_over = False
         self.mask = getMask('ptera00')
-
+    
     def stop(self):
-        self.isGameOver = True
+        self.is_game_over = True
     
     def move(self):
         self.moving = True
+    
+    def play(self, screen, game_speed):
+        self.pos = editTuple(self.pos, 0, self.pos[0] - (PTERA_SPEED + (game_speed * 0.003)))
 
-    def play(self, screen, score):
-        if self.isGameOver:
-            blitSprite('ptera0' + str(self.animationNum), screen, self.x, self.y)
+        #If player died
+        if self.is_game_over:
+            blitSprite(screen, 'ptera0' + str(self.animation_num), self.pos)
             return
-        self.x -= PTERA_SPEED + (score * 0.003)
+
         self.frames += 1
-        self.animationNum = math.floor(self.frames/5)
+        self.animation_num = math.floor(self.frames / 5)
+
+        #animation number reset
         if self.animationNum > 1:
             self.frames = 0
             self.animationNum = 0
-        self.w = getWidth('ptera0' + str(self.animationNum))
-        self.h = getHeight('ptera0' + str(self.animationNum))
-        self.rect = getRect('ptera0' + str(self.animationNum), (self.x, self.y))
-        self.mask = getMask('ptera0' + str(self.animationNum))
-        addY = 0
-        if self.animationNum == 1:
-            addY = -6
-        blitSprite('ptera0' + str(self.animationNum), screen, self.x, self.y + addY)
+
+        self.mask = getMask('ptera0' + str(self.animation_num))
+        blitSprite(screen, 'ptera0' + str(self.animationNum), self.pos)
 
 def generateRandomPtera(isPlaying):
     if not isPlaying:
         return
-    randomChance = random.randrange(1, PTERA_PROBABILITY + 1)
-    if randomChance <= 1:
+    random_chance = random.randrange(1, PTERA_PROBABILITY + 1)
+    if random_chance <= 1:
         return Ptera()

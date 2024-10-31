@@ -10,5 +10,5 @@ class GameOver_UI:
     
     def display(self, screen):
         if not self.visible: return
-        blitSprite('game_over', screen, (SCREEN_WIDTH - 191)/2, 340)
-        blitSprite('restart', screen, (SCREEN_WIDTH - 35)/2, 380)
+        blitSprite(screen, 'game_over', ((SCREEN_WIDTH - 191)/2, 340))
+        blitSprite(screen, 'restart', ((SCREEN_WIDTH - 35)/2, 380))

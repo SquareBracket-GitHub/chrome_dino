@@ -1,45 +1,40 @@
-from settings import SCREEN_WIDTH, CACTUS_PROBABILITY
-from utils.sprites import blitSprite, getRect, getMask
-from settings import GROUND_SPEED
 import random
 
-class Cactus():
-    def __init__(self, img):
-        self.x = SCREEN_WIDTH
-        self.y = 470
-        self.w = 1
-        self.h = 1
-        self.rect = getRect('ptera00', (self.x, self.y))
-        self.img = img
-        self.moving = False
-        self.isGameOver = False
-        self.mask = getMask(self.img)
+from settings import SCREEN_WIDTH, GROUND_SPEED, CACTUS_PROBABILITY
+from utils.sprites import blitSprite, getMask
+from utils.tuple import editTuple
 
+class Cactus():
+    def __init__(self, sprite):
+        self.pos = (SCREEN_WIDTH, 470)
+        self.sprite = sprite
+        self.moving = False
+        self.is_game_over = False
+        self.mask = getMask(self.sprite)
+    
     def stop(self):
-        self.isGameOver = True
+        self.is_game_over = True
     
     def move(self):
         self.moving = True
-
-    def play(self, screen, score):
-        if self.isGameOver:
-            blitSprite(self.img, screen, self.x, self.y)
+    
+    def play(self, screen, game_speed):
+        if self.is_game_over:
+            blitSprite(screen, self.sprite, self.pos)
             return
-        self.x -= GROUND_SPEED + (score * 0.003)
+        self.pos = editTuple(self.pos, 0, self.pos[0] - (GROUND_SPEED + (game_speed * 0.003)))
 
-        self.rect = getRect(self.img, (self.x, self.y))
-
-        blitSprite(self.img, screen, self.x, self.y)
+        blitSprite(screen, self.sprite, self.pos)
 
 def generateRandomCactus(isPlaying):
     if not isPlaying:
         return
-    randomChance = random.randrange(1, CACTUS_PROBABILITY + 1) # 1 to 100
-    if randomChance <= 5:
+    random_chance = random.randrange(1, CACTUS_PROBABILITY + 1) #1 to 100
+    if random_chance <= 5:
         size = 'small'
         type = 0
-        randomType = random.randrange(1, 7) # 1 to 6
-        if randomType > 3:
+        random_type = random.randrange(1, 7) #1 to 6
+        if random_type > 3:
             size = 'large'
-            type = randomType - 4
+            type = random_type - 4
         return Cactus(size + '_cactus0' + str(type))

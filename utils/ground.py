@@ -1,11 +1,10 @@
-from utils.sprites import blitSprite
 from settings import SCREEN_WIDTH, GROUND_SPEED
+from utils.sprites import blitSprite
+from utils.tuple import editTuple
 
 class Ground:
     def __init__(self, x):
-        self.x = x
-        self.y = 500
-        self.speed = GROUND_SPEED
+        self.pos = (x, 500)
         self.moving = False
 
     def move(self):
@@ -14,10 +13,10 @@ class Ground:
     def stop(self):
         self.moving = False
         
-    def play(self, screen, score):
+    def play(self, screen, game_speed):
         if self.moving:
-            self.x -= self.speed + (score * 0.003)
-        if self.x <= -SCREEN_WIDTH - 100:
-            self.x += 2 * 1200
+            self.pos = editTuple(self.pos, 0, self.pos[0] - (GROUND_SPEED + (game_speed * 0.003)))
+        if self.pos[0] <= -SCREEN_WIDTH - 100:
+            self.pos = editTuple(self.pos, 0, self.pos[0] + (2 * 1200))
         
-        blitSprite('ground', screen, self.x, self.y)
+        blitSprite(screen, 'ground', self.pos)

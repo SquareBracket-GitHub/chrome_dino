@@ -22,8 +22,8 @@ for sprite in root.findall('sprite'):
     image = spritesheet.subsurface(pygame.Rect(x, y, width, height))
     sprites[name] = image
 
-def blitSprite(sprite, screen, x=0, y=0):
-    return screen.blit(sprites[sprite], (x, y))
+def blitSprite(screen, sprite, pos=(0,0)):
+    return screen.blit(sprites[sprite], pos)
 
 def blitText(screen, content='', pos=(0,0), direction='RIGHT'):
     space = 0
@@ -32,21 +32,10 @@ def blitText(screen, content='', pos=(0,0), direction='RIGHT'):
     if direction == 'LEFT':
         spacing = spacing * -1
         text_list.reverse()
-    for i, word in enumerate(text_list):
-        if word != ' ':
-            blitSprite(word, screen, pos[0] + space, pos[1])
+    for word in enumerate(text_list):
+        if word[1] != ' ':
+            blitSprite(screen, word[1], (pos[0] + space, pos[1]))
         space += spacing
-
-def getWidth(sprite):
-    w = sprites[sprite].get_width()
-    return w
-
-def getHeight(sprite):
-    h = sprites[sprite].get_height()
-    return h
-
-def getRect(sprite, position):
-    return sprites[sprite].get_rect(center = position)
 
 def getMask(sprite):
     return pygame.mask.from_surface(sprites[sprite])

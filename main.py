@@ -78,7 +78,7 @@ def resetGame():
     cactus_arr.clear()
 
 def detectCollision(object1, object2):
-    return object1.mask.overlap(object2.mask, (object2.x - object1.x, object2.y - object1.y))
+    return object1.mask.overlap(object2.mask, (object2.pos[0] - object1.pos[0], object2.pos[1] - object1.pos[1]))
 
 running = True
 clock = pygame.time.Clock()
@@ -131,9 +131,9 @@ while running:
     dont_spawn_ptera = False
     for ptera in ptera_arr:
         ptera.play(screen, game_speed)
-        if ptera.x > 0:
+        if ptera.pos[0] > 0:
             dont_spawn_ptera = True
-        if ptera.x < SCREEN_WIDTH - PTERA_INTERVAL:
+        if ptera.pos[0] < SCREEN_WIDTH - PTERA_INTERVAL:
             del ptera_arr[0]
         
         isCollided = detectCollision(player, ptera)
@@ -145,9 +145,9 @@ while running:
     i = 0
     for cactus in cactus_arr:
         cactus.play(screen, game_speed)
-        if cactus.x > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPEED):
+        if cactus.pos[0] > SCREEN_WIDTH - CACTUS_INTERVAL - (game_speed * CACTUS_INTERVAL_SCALING_SPEED):
             dont_spawn_cactus = True
-        if cactus.x < -100:
+        if cactus.pos[0] < -100:
             delete_cactus_arr.append(i)
         
         isCollided = detectCollision(player, cactus)
@@ -163,13 +163,13 @@ while running:
     if not dont_spawn_ptera and game_score >= PTERA_STARTING_SPAWN_SCORE:
         new_ptera = generateRandomPtera(game_status == 'playing')
         if new_ptera:
-            p_d_distance = (new_ptera.x - player.x)
+            p_d_distance = (new_ptera.pos[0] - player.pos[0])
             t = p_d_distance  / (PTERA_SPEED  + game_speed * 0.003)
             moved_cactus_arr = []
             for c in cactus_arr:
-                moved_cactus_arr.append(c.x - t * (GROUND_SPEED + game_speed * 0.003))
+                moved_cactus_arr.append(c.pos[0] - t * (GROUND_SPEED + game_speed * 0.003))
             for x in moved_cactus_arr:
-                distance = math.sqrt(math.pow(player.x - x, 2))
+                distance = math.sqrt(math.pow(player.pos[0] - x, 2))
                 if distance < UNFAIR_PTERA_CENSOR_RANGE:
                     dont_spawn_ptera = True
             if not dont_spawn_ptera:
@@ -186,7 +186,7 @@ while running:
         playSound(2)
     
     #starting game event
-    if player.farToGround < 0:
+    if player.far_to_ground < 0:
         game_status = 'playing'
         ground_1.move()
         ground_2.move()
