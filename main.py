@@ -186,7 +186,7 @@ while running:
         playSound(2)
     
     #starting game event
-    if player.far_to_ground < 0:
+    if player.far_to_ground < 0 and game_status != 'gameover':
         game_status = 'playing'
         ground_1.move()
         ground_2.move()
