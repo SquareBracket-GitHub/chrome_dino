@@ -14,9 +14,9 @@ class Ground:
         self.moving = False
         
     def play(self, screen, game_speed):
-        if self.moving:
-            self.pos = editTuple(self.pos, 0, self.pos[0] - (GROUND_SPEED + (game_speed * 0.003)))
         if self.pos[0] <= -SCREEN_WIDTH - 100:
             self.pos = editTuple(self.pos, 0, self.pos[0] + (2 * 1200))
+        if self.moving:
+            self.pos = editTuple(self.pos, 0, self.pos[0] - (GROUND_SPEED + (game_speed * 0.003)))
         
         blitSprite(screen, 'ground', self.pos)
