@@ -16,10 +16,10 @@ CACTUS_INTERVAL_SCALING_SPEED = 0.0 #선인장 간격 증가 속도
 PTERA_STARTING_SPAWN_SCORE = 2000   #프테라가 등장하기 시작하는 점수
 PTERA_PROBABILITY = 200             #프레임당 값분의 1
 CACTUS_PROBABILITY = 100            #프레임당 값분의 1
-UNFAIR_PTERA_CENSOR_RANGE = 150     #불공정한 프테라 센서의 범위 (좌우로)
+UNFAIR_PTERA_CENSOR_RANGE = 170     #불공정한 프테라 센서의 범위 (좌우로)
 
 #SCORE SYSTEM
-CHECK_POINT = 300                   #값의 배수마다 체크포인트 효과음
+CHECK_POINT = 500                   #값의 배수마다 체크포인트 효과음
 
 #SOUND SETTING
 SOUND_ALLOWED = True
