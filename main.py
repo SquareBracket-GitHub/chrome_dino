@@ -35,7 +35,7 @@ ptera_arr = []
 cactus_arr = []
 
 #game variables
-game_status = 'wating'
+game_status = 'waiting'
 game_score = 0
 game_speed = 0
 
@@ -65,7 +65,7 @@ def resetGame():
     global game_score
     global game_speed
 
-    game_status = 'wating'
+    game_status = 'waiting'
     game_score = 0
     game_speed = 0
 
@@ -94,9 +94,11 @@ while running:
                     player.jump()
                     break
                 case pygame.K_DELETE:
+                    print('Event: Dying Cheat (present score: ' + str(game_score) + ')')
                     gameOver()
                     break
                 case pygame.K_0:
+                    print('Event: Reset High Score (high score: ' + loadHighScore() + ')')
                     resetHighScore()
                     break
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -174,6 +176,8 @@ while running:
                     dont_spawn_ptera = True
             if not dont_spawn_ptera:
                 ptera_arr.append(new_ptera)
+                print("Event: New Ptera (spawn)")
+            else: print("Event: New Ptera (don't spawn)")
     
     #spawn cactus
     if not dont_spawn_cactus:
@@ -186,15 +190,11 @@ while running:
         playSound(2)
     
     #starting game event
-    if player.far_to_ground < 0 and game_status != 'gameover':
+    if player.far_to_ground < 0 and game_status == 'waiting':
         game_status = 'playing'
         ground_1.move()
         ground_2.move()
-        for ptera in ptera_arr:
-            ptera.move()
-        for cactus in cactus_arr:
-            cactus.move()
-    
+
     pygame.display.flip()
 
     clock.tick(60)
