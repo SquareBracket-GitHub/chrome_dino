@@ -1,5 +1,6 @@
 import pygame
 import math
+import datetime
 
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPEED, PTERA_STARTING_SPAWN_SCORE, UNFAIR_PTERA_CENSOR_RANGE
 from utils.ground import Ground
@@ -45,6 +46,9 @@ def gameOver():
 
     if game_status != 'gameover':
         playSound(1)
+
+        now = datetime.datetime.now()
+        print('Event: Gameover (present score: ' + str(game_score) + ', datetime: ' + str(now) + ')')
 
     game_status = 'gameover'
 
