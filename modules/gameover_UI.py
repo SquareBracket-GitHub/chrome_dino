@@ -1,4 +1,4 @@
-from utils.sprites import blitSprite
+from modules.sprites import blitSprite
 from settings import SCREEN_WIDTH
 
 class GameOver_UI:

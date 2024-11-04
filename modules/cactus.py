@@ -1,8 +1,8 @@
 import random
 
 from settings import SCREEN_WIDTH, GROUND_SPEED, CACTUS_PROBABILITY
-from utils.sprites import blitSprite, getMask
-from utils.tuple import editTuple
+from modules.sprites import blitSprite, getMask
+from modules.tuple import editTuple
 
 class Cactus():
     def __init__(self, sprite):

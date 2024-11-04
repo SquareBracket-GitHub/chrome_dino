@@ -2,8 +2,8 @@ import random
 import math
 
 from settings import SCREEN_WIDTH, PTERA_SPEED, PTERA_PROBABILITY
-from utils.sprites import blitSprite, getMask
-from utils.tuple import editTuple
+from modules.sprites import blitSprite, getMask
+from modules.tuple import editTuple
 
 class Ptera:
     def __init__(self):

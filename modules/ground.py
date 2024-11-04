@@ -1,6 +1,6 @@
 from settings import SCREEN_WIDTH, GROUND_SPEED
-from utils.sprites import blitSprite
-from utils.tuple import editTuple
+from modules.sprites import blitSprite
+from modules.tuple import editTuple
 
 class Ground:
     def __init__(self, x):

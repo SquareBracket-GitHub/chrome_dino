@@ -2,9 +2,9 @@ import pygame
 import math
 
 from settings import JUMP_POWER
-from utils.sprites import blitSprite, getMask
-from utils.sound import playSound
-from utils.tuple import editTuple
+from modules.sprites import blitSprite, getMask
+from modules.sound import playSound
+from modules.tuple import editTuple
 
 class Player:
     def __init__(self):
