@@ -8,18 +8,17 @@ class Cactus():
     def __init__(self, sprite):
         self.pos = (SCREEN_WIDTH, 470)
         self.sprite = sprite
-        self.moving = False
-        self.is_game_over = False
+        self.moving = True
         self.mask = getMask(self.sprite)
     
     def stop(self):
-        self.is_game_over = True
+        self.moving = False
     
     def move(self):
         self.moving = True
     
     def play(self, screen, game_speed):
-        if self.is_game_over:
+        if not self.moving:
             blitSprite(screen, self.sprite, self.pos)
             return
         self.pos = editTuple(self.pos, 0, self.pos[0] - (GROUND_SPEED + (game_speed * 0.003)))

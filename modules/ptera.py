@@ -10,19 +10,18 @@ class Ptera:
         self.pos = (SCREEN_WIDTH, random.randrange(394, 458))
         self.frames = 0
         self.animation_num = 0
-        self.moving = False
-        self.is_game_over = False
+        self.moving = True
         self.mask = getMask('ptera00')
     
     def stop(self):
-        self.is_game_over = True
+        self.moving = False
     
     def move(self):
         self.moving = True
     
     def play(self, screen, game_speed):
         #If player died
-        if self.is_game_over:
+        if not self.moving:
             blitSprite(screen, 'ptera0' + str(self.animation_num), self.pos)
             return
         
