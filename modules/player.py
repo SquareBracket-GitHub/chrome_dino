@@ -53,8 +53,11 @@ class Player:
             self.frames = 0
             self.animation_num = 0
         
-        if self.pos[1] > 470:
-            self.state = 'run'
+        if self.jumping < 0 and self.state != 'idle':
+            if self.pos[1] >= 459.6 and self.substate == '':
+                self.state = 'run'
+            elif self.pos[1] >= 458 and self.substate == '_crawl':
+                self.state = 'run'
         
         if self.substate == '':
             self.jumping -= 0.4
