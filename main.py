@@ -3,14 +3,14 @@ import math
 import datetime
 
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PTERA_INTERVAL, CACTUS_INTERVAL, CHECK_POINT, PTERA_SPEED, GROUND_SPEED, CACTUS_INTERVAL_SCALING_SPEED, PTERA_STARTING_SPAWN_SCORE, UNFAIR_PTERA_CENSOR_RANGE
-from utils.ground import Ground
-from utils.player import Player
-from utils.gameover_UI import GameOver_UI
-from utils.high_score import writeHighScore, resetHighScore, loadHighScore
-from utils.sound import playSound
-from utils.sprites import blitText
-from utils.ptera import generateRandomPtera
-from utils.cactus import generateRandomCactus
+from modules.ground import Ground
+from modules.player import Player
+from modules.gameover_UI import GameOver_UI
+from modules.high_score import writeHighScore, resetHighScore, loadHighScore
+from modules.sound import playSound
+from modules.sprites import blitText
+from modules.ptera import generateRandomPtera
+from modules.cactus import generateRandomCactus
 
 #pygame init
 pygame.init()
